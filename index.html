@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parichit Sharma · Localization Operations Specialist · BlaBlaCar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark:            #050505;
+  --surface-dark:       rgba(255, 255, 255, 0.04);
+  --highlight-dark:     rgba(255, 255, 255, 0.06);
+  --border-dark:        rgba(255, 255, 255, 0.10);
+  --border-strong-dark: rgba(255, 255, 255, 0.18);
+  --text-dark:          #f5f5f5;
+  --text-dark-subtle:   rgba(255, 255, 255, 0.62);
+  --text-dark-faint:    rgba(255, 255, 255, 0.38);
+  --dot-dark:           rgba(250, 250, 250, 0.07);
+
+  --bg-light:           #f5f7fb;
+  --surface-light:      rgba(245, 249, 255, 0.55);
+  --highlight-light:    #ffffff;
+  --border-light:       rgba(0, 76, 153, 0.12);
+  --border-strong-light:rgba(0, 76, 153, 0.22);
+  --text-light:         #0a1a2e;
+  --text-light-subtle:  #3d5878;
+  --text-light-faint:   #6b82a1;
+  --dot-light:          rgba(0, 76, 153, 0.12);
+
+  --blue-50:   #e2efff;
+  --blue-100:  #bddcff;
+  --blue-200:  #8bc2ff;
+  --blue-300:  #60a5fa;
+  --blue-400:  #2c7de0;
+  --blue:      #0071e3;
+  --blue-hover:#0077ed;
+  --blue-600:  #0056b3;
+  --blue-700:  #004a99;
+  --blue-800:  #002b66;
+
+  --shadow-premium: 0 12px 40px -16px rgba(0, 86, 179, 0.35),
+                    0 2px 8px -4px rgba(0, 31, 74, 0.2);
+
+  --s-1: 8px;  --s-2: 16px;  --s-3: 24px;  --s-4: 32px;
+  --s-5: 40px; --s-6: 48px;  --s-7: 56px;  --s-8: 64px;
+  --s-9: 72px; --s-10: 80px; --s-11: 96px; --s-12: 112px;
+
+  --radius-sm:   16px;
+  --radius-md:   24px;
+  --radius-pill: 980px;
+
+  --max-w: 1100px;
+}
+
+html[data-theme="light"] {
+  --bg-dark:            var(--bg-light);
+  --surface-dark:       var(--surface-light);
+  --highlight-dark:     var(--highlight-light);
+  --border-dark:        var(--border-light);
+  --border-strong-dark: var(--border-strong-light);
+  --text-dark:          var(--text-light);
+  --text-dark-subtle:   var(--text-light-subtle);
+  --text-dark-faint:    var(--text-light-faint);
+  --dot-dark:           var(--dot-light);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+  line-height: 1.55;
+  overflow-x: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -20;
+  background-color: var(--bg-dark);
+  background-image:
+    radial-gradient(ellipse 70% 90% at 15% -10%, rgba(0, 113, 227, 0.16), transparent 62%),
+    radial-gradient(ellipse 50% 70% at 90% -20%, rgba(44, 125, 224, 0.10), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 50% 110%, rgba(0, 86, 179, 0.12), transparent 70%);
+  pointer-events: none;
+}
+
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: -10; opacity: 0.55;
+  background-image:
+    radial-gradient(circle at 25% 25%, var(--dot-dark) 0.65px, transparent 1px),
+    radial-gradient(circle at 75% 75%, var(--dot-dark) 0.65px, transparent 1px);
+  background-size: 14px 14px;
+  pointer-events: none;
+}
+
+.grain {
+  position: fixed; inset: 0; z-index: -5;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+html[data-theme="light"] .grain { opacity: 0.05; mix-blend-mode: multiply; }
+
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+  background: linear-gradient(90deg, var(--blue-200), var(--blue), var(--blue-700));
+  z-index: 10000;
+  transition: width 0.08s linear;
+  box-shadow: 0 0 10px rgba(0, 113, 227, 0.5);
+}
+
+.accent {
+  background: linear-gradient(135deg, var(--blue-200) 0%, var(--blue) 60%, var(--blue-700) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+html[data-theme="light"] .accent {
+  background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* NAV */
+.nav-pill {
+  position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
+  z-index: 9000;
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: 10px 20px;
+  background: rgba(10, 12, 16, 0.55);
+  border: 1px solid var(--border-dark);
+  border-radius: 20px;
+  backdrop-filter: saturate(160%) blur(18px);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  max-width: calc(100vw - 32px);
+}
+html[data-theme="light"] .nav-pill { background: rgba(255,255,255,0.65); }
+.nav-brand { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
+.nav-divider { width: 1px; height: 16px; background: var(--border-strong-dark); }
+.nav-links { display: flex; gap: var(--s-3); }
+.nav-links a {
+  font-size: 13px; font-weight: 500; color: var(--text-dark);
+  text-decoration: none; opacity: 0.55; transition: opacity 0.25s ease;
+  white-space: nowrap;
+}
+.nav-links a:hover, .nav-links a.is-active { opacity: 1; }
+@media (max-width: 720px) { .nav-links { display: none; } }
+
+/* LAYOUT */
+section { padding: var(--s-12) var(--s-3); }
+.wrap { max-width: var(--max-w); margin: 0 auto; }
+
+.section-header { text-align: center; max-width: 760px; margin: 0 auto var(--s-9); }
+.section-heading {
+  font-size: clamp(1.875rem, 3.6vw, 2.75rem);
+  font-weight: 600; letter-spacing: -0.015em; line-height: 1.1;
+}
+.section-sub { margin-top: var(--s-2); font-size: 15px; color: var(--text-dark-subtle); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding-top: 120px; padding-bottom: var(--s-10);
+}
+.eyebrow-pill {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.28em; text-transform: uppercase; color: var(--blue-200);
+  border: 1px solid var(--border-strong-dark); border-radius: var(--radius-pill);
+  padding: 7px 16px; margin-bottom: var(--s-3);
+}
+.hero-label {
+  font-size: 13px; font-weight: 500; letter-spacing: 0.02em;
+  color: var(--text-dark-faint); text-transform: uppercase; margin-bottom: var(--s-4);
+}
+.hero-title {
+  font-size: clamp(2.5rem, 5.6vw, 4rem); font-weight: 600;
+  letter-spacing: -0.025em; line-height: 1.02; max-width: 16ch; margin: 0 auto;
+}
+.hero-fit {
+  max-width: 620px; margin: var(--s-5) auto 0;
+  font-size: 16px; color: var(--text-dark-subtle); line-height: 1.6;
+}
+.hero-fit strong { color: var(--text-dark); font-weight: 600; }
+.cta-group { display: flex; gap: var(--s-2); justify-content: center; margin-top: var(--s-6); flex-wrap: wrap; }
+.btn {
+  font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer;
+  padding: 12px 22px; border-radius: var(--radius-pill); text-decoration: none;
+  transition: all 0.25s ease; border: 1px solid transparent; display: inline-block;
+}
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:hover { background: var(--blue-hover); transform: translateY(-1px); }
+.btn-outline { background: transparent; color: var(--text-dark); border-color: var(--border-strong-dark); }
+.btn-outline:hover { border-color: var(--blue-300); }
+
+/* CAPABILITY CARDS */
+.cap-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-3);
+  margin-top: var(--s-10); width: 100%; max-width: 920px;
+}
+.card {
+  position: relative; overflow: hidden;
+  background: var(--surface-dark); border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm); padding: var(--s-4);
+  text-align: left; transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+.card::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(340px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(0,113,227,0.14), transparent 60%);
+}
+.card:hover { border-color: rgba(0,113,227,0.30); box-shadow: var(--shadow-premium); transform: translateY(-2px); }
+.card:hover::after { opacity: 1; }
+.cap-index { font-size: 12px; font-weight: 600; color: var(--blue-200); letter-spacing: 0.1em; }
+.cap-label { font-size: 13px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; margin: var(--s-2) 0 var(--s-1); }
+.cap-body { font-size: 14px; color: var(--text-dark-subtle); line-height: 1.55; }
+@media (max-width: 760px) { .cap-grid { grid-template-columns: 1fr; } }
+
+/* ORNAMENT */
+.ornament { display: flex; align-items: center; justify-content: center; gap: var(--s-2); opacity: 0.5; padding: var(--s-2) 0; }
+.ornament .rule { width: 60px; height: 1px; background: var(--border-strong-dark); }
+.ornament .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--blue-300); }
+
+/* RESEARCH + LANDSCAPE GRID */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-3); }
+@media (max-width: 860px) { .grid-3 { grid-template-columns: 1fr; } }
+.finding { min-height: 230px; display: flex; flex-direction: column; }
+.finding .idx { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue-200); }
+.finding h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: var(--s-2) 0 var(--s-2); line-height: 1.3; }
+.finding p { font-size: 14px; color: var(--text-dark-subtle); line-height: 1.6; }
+.comp-name { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--s-1); }
+.comp-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dark-faint); margin-bottom: var(--s-2); }
+.landscape-gap {
+  max-width: 700px; margin: var(--s-8) auto 0; text-align: center;
+  font-size: 16px; color: var(--text-dark); line-height: 1.6;
+}
+.landscape-gap strong { font-weight: 600; }
+
+/* WORK / CASE STUDIES */
+.case { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-6); padding: var(--s-8) 0; border-bottom: 1px solid var(--border-dark); }
+.case:first-of-type { border-top: 1px solid var(--border-dark); }
+.case-title { font-size: clamp(1.25rem, 1.8vw, 1.5rem); font-weight: 600; letter-spacing: -0.01em; }
+.case-body { font-size: 15px; color: var(--text-dark-subtle); line-height: 1.6; margin-top: var(--s-2); max-width: 42ch; }
+.case-meta { font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dark-faint); margin-top: var(--s-3); }
+.metrics { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4); align-content: center; }
+.metric__value { font-size: clamp(2.25rem, 3.8vw, 3rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+.metric__label { font-size: 13px; font-weight: 600; margin-top: var(--s-1); }
+.metric__sub { font-size: 12px; color: var(--text-dark-faint); margin-top: 4px; line-height: 1.4; }
+@media (max-width: 800px) { .case { grid-template-columns: 1fr; gap: var(--s-4); } }
+
+/* THIRTY DAYS */
+.thirty { min-height: 210px; }
+.thirty .num { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue-200); }
+.thirty p { font-size: 14px; color: var(--text-dark-subtle); line-height: 1.6; margin-top: var(--s-2); }
+
+/* TIMELINE */
+.timeline-item { display: grid; grid-template-columns: 180px 1fr; gap: var(--s-4); padding: var(--s-4) 0; border-top: 1px solid var(--border-dark); }
+.timeline-item:last-child { border-bottom: 1px solid var(--border-dark); }
+.timeline-date { font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue-200); padding-top: 4px; }
+.timeline-role { font-size: 17px; font-weight: 600; letter-spacing: -0.005em; }
+.timeline-co { font-size: 14px; color: var(--text-dark-subtle); margin-top: 2px; }
+.timeline-body { font-size: 14px; color: var(--text-dark-faint); margin-top: var(--s-1); }
+@media (max-width: 700px) { .timeline-item { grid-template-columns: 1fr; gap: var(--s-1); } }
+
+/* CONTACT */
+.contact { text-align: center; }
+.rotating-head { font-size: clamp(1.875rem, 3.6vw, 2.75rem); font-weight: 600; letter-spacing: -0.015em; line-height: 1.15; }
+.rotator { display: block; height: 1.2em; overflow: hidden; position: relative; margin-top: 6px; }
+.rotator span {
+  display: block; position: absolute; left: 0; right: 0;
+  opacity: 0; transform: translateY(100%); transition: transform 0.5s ease, opacity 0.5s ease;
+}
+.rotator span.is-active { opacity: 1; transform: translateY(0); }
+.rotator span.is-past { opacity: 0; transform: translateY(-100%); }
+.contact-note {
+  max-width: 620px; margin: var(--s-8) auto 0; text-align: left;
+  font-size: 15px; color: var(--text-dark-subtle); line-height: 1.7;
+}
+.contact-note p { margin-bottom: var(--s-3); }
+.contact-sign { color: var(--text-dark); font-weight: 600; }
+.contact-cta { display: flex; gap: var(--s-2); justify-content: center; margin-top: var(--s-8); flex-wrap: wrap; }
+
+/* FOOTER */
+footer { text-align: center; padding: var(--s-9) var(--s-3) var(--s-8); }
+.footer-row { display: flex; align-items: center; justify-content: center; gap: var(--s-2); flex-wrap: wrap; font-size: 12px; color: var(--text-dark-subtle); letter-spacing: 0.02em; }
+.footer-row a { color: var(--text-dark-subtle); text-decoration: none; }
+.footer-row a:hover { color: var(--text-dark); }
+.footer-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-dark-faint); }
+.auth-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue-300); box-shadow: 0 0 0 3px rgba(0,113,227,0.12); display: inline-block; }
+.footer-year { margin-top: var(--s-3); font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--text-dark-faint); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s cubic-bezier(0.22,0.61,0.36,1), transform 0.9s cubic-bezier(0.22,0.61,0.36,1); }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0s !important; transition-duration: 0s !important; }
+  .reveal { opacity: 1; transform: none; }
+  .scroll-progress { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="scroll-progress" id="progress"></div>
+
+<nav class="nav-pill">
+  <span class="nav-brand">Parichit Sharma</span>
+  <span class="nav-divider"></span>
+  <div class="nav-links">
+    <a href="#work">Fit</a>
+    <a href="#research">Research</a>
+    <a href="#landscape">Landscape</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <span class="eyebrow-pill">Application</span>
+    <div class="hero-label">Localization Operations Specialist · BlaBlaCar · Paris</div>
+    <h1 class="hero-title">The localization run, owned <span class="accent">end to end</span>.</h1>
+    <p class="hero-fit">You need one reliable owner for a 40+ locale run while the AI work scales. I did exactly that solo at <strong>Global Blue</strong>, intake to publish, across six EMEA markets.</p>
+    <div class="cta-group">
+      <a href="#work" class="btn btn-primary">Read the case ↓</a>
+      <a href="#contact" class="btn btn-outline">Get in touch</a>
+    </div>
+
+    <div class="cap-grid">
+      <div class="card reveal">
+        <div class="cap-index">01</div>
+        <div class="cap-label">Own the run</div>
+        <p class="cap-body">Ran a weekly multi-locale loop solo, intake to publish, and lifted on-time delivery to 100%.</p>
+      </div>
+      <div class="card reveal">
+        <div class="cap-index">02</div>
+        <div class="cap-label">QA the output</div>
+        <p class="cap-body">Checklists on links, placeholders, and metadata that caught errors before release, not after.</p>
+      </div>
+      <div class="card reveal">
+        <div class="cap-index">03</div>
+        <div class="cap-label">Review the AI</div>
+        <p class="cap-body">I read AI output critically, then ship. I don't take it at face value.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ornament" aria-hidden="true"><span class="rule"></span><span class="dot"></span><span class="rule"></span></div>
+
+<!-- WORK / FIT IN NUMBERS -->
+<section id="work">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <h2 class="section-heading">Why I fit, in numbers.</h2>
+    </div>
+
+    <div class="case reveal">
+      <div>
+        <h3 class="case-title">AI-assisted reporting at Emergence Software.</h3>
+        <p class="case-body">I ran cross-portfolio reporting through AI and no-code workflows, validating every model output before it went out. I also built the reusable playbooks that made the process repeatable.</p>
+        <p class="case-meta">Emergence Software · GTM Consultant · 2025–2026</p>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <p class="metric__value accent" data-value="38" data-suffix="%">38%</p>
+          <p class="metric__label">Weekly reporting effort cut</p>
+          <p class="metric__sub">17 hours to under 11, output checked first</p>
+        </div>
+        <div class="metric">
+          <p class="metric__value accent" data-value="14" data-suffix="">14</p>
+          <p class="metric__label">Reusable playbooks shipped</p>
+          <p class="metric__sub">Planning cycles from 16 days to under 7</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="case reveal">
+      <div>
+        <h3 class="case-title">The EMEA localization run at Global Blue.</h3>
+        <p class="case-body">I owned the weekly multi-region content run solo. I built localization QA checklists in Magnolia CMS, then consolidated four European regions into one admin system and documented the handoff.</p>
+        <p class="case-meta">Global Blue · Associate Digital Marketing Manager · 2025</p>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <p class="metric__value accent" data-value="87" data-suffix="%">87%</p>
+          <p class="metric__label">Localization errors cut</p>
+          <p class="metric__sub">QA checklists, scaled across every EMEA region</p>
+        </div>
+        <div class="metric">
+          <p class="metric__value accent" data-value="100" data-suffix="%">100%</p>
+          <p class="metric__label">On-time report delivery</p>
+          <p class="metric__sub">Complaints from 24 to 3 a week, five languages</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="case reveal">
+      <div>
+        <h3 class="case-title">Intake-to-launch delivery at Upfluence.</h3>
+        <p class="case-body">I owned request intake to launch across a full release cycle, triaging tickets and coordinating Product, CS, and Sales through structured workflows and launch checklists.</p>
+        <p class="case-meta">Upfluence · Associate Product Marketing Manager · 2024</p>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <p class="metric__value accent" data-value="23" data-suffix="">23</p>
+          <p class="metric__label">Releases run intake-to-launch</p>
+          <p class="metric__sub">Ticket-based workflows, on-time execution</p>
+        </div>
+        <div class="metric">
+          <p class="metric__value accent" data-value="90" data-prefix="$" data-suffix="K">$90K</p>
+          <p class="metric__label">ARR from the Amazon launch</p>
+          <p class="metric__sub">12% higher engagement, 48 enterprise clients</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ornament" aria-hidden="true"><span class="rule"></span><span class="dot"></span><span class="rule"></span></div>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <h2 class="section-heading">What I noticed about BlaBlaCar.</h2>
+      <p class="section-sub">Read the week the expansion news landed.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card finding reveal">
+        <div class="idx">Finding 01</div>
+        <h3>You just doubled the map with AI.</h3>
+        <p>In June you launched 20 new countries to reach 41, using AI to localize the app fast, no one on the ground. The launch is the easy part. The run is what comes next.</p>
+      </div>
+      <div class="card finding reveal">
+        <div class="idx">Finding 02</div>
+        <h3>One app, more modes every year.</h3>
+        <p>Carpool, bus, and 2025 train booking now sit side by side in one app. Every new mode and market is another set of strings that has to read native.</p>
+      </div>
+      <div class="card finding reveal">
+        <div class="idx">Finding 03</div>
+        <h3>AI can open a market, not hold it.</h3>
+        <p>The role asks someone to keep the run reliable while the AI and strategy work moves in parallel. That space between fast and reliable is the whole job.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ornament" aria-hidden="true"><span class="rule"></span><span class="dot"></span><span class="rule"></span></div>
+
+<!-- LANDSCAPE -->
+<section id="landscape">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <h2 class="section-heading">The map is the moat.</h2>
+      <p class="section-sub">Who is pushing on it, and where the run comes in.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card finding reveal">
+        <div class="comp-tag">Bus + carpool</div>
+        <div class="comp-name">Flix (FlixBus / FlixCar)</div>
+        <p>Buses across 40+ countries and a FlixCar carpool product aimed straight at you. Scale is their pitch.</p>
+      </div>
+      <div class="card finding reveal">
+        <div class="comp-tag">Rail</div>
+        <div class="comp-name">Ouigo · SNCF</div>
+        <p>Low-cost, state-backed rail that undercuts carpooling on the busiest corridors when subsidies rise.</p>
+      </div>
+      <div class="card finding reveal">
+        <div class="comp-tag">Daily commute</div>
+        <div class="comp-name">Karos</div>
+        <p>French short-haul commute carpooling. You bought Klaxit in 2023 to defend that ground.</p>
+      </div>
+    </div>
+    <p class="landscape-gap">None of them run one app across 41 markets. <strong>That reach is the advantage, and it only holds if every locale reads like a local wrote it.</strong> That is what the run protects.</p>
+  </div>
+</section>
+
+<div class="ornament" aria-hidden="true"><span class="rule"></span><span class="dot"></span><span class="rule"></span></div>
+
+<!-- FIRST 30 DAYS -->
+<section id="thirty">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <h2 class="section-heading">What I'd want to learn first.</h2>
+      <p class="section-sub">Three things I'd map before I touch the live loop.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card thirty reveal">
+        <div class="num">Week 1</div>
+        <p>How the AI-to-linguist handoff actually flows: where strings get staged, who reviews them, and where they tend to stall.</p>
+      </div>
+      <div class="card thirty reveal">
+        <div class="num">Week 2</div>
+        <p>Which validation flags fire most in Phrase, from placeholders to plurals to do-not-translate terms, and the usual culprits by locale.</p>
+      </div>
+      <div class="card thirty reveal">
+        <div class="num">Week 3</div>
+        <p>The monthly product content review: who the per-locale reviewers are, and how their changes get collected and applied back.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ornament" aria-hidden="true"><span class="rule"></span><span class="dot"></span><span class="rule"></span></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <h2 class="section-heading">Experience.</h2>
+    </div>
+    <div class="reveal">
+      <div class="timeline-item">
+        <div class="timeline-date">2025–2026</div>
+        <div>
+          <div class="timeline-role">Product Marketing &amp; GTM Consultant</div>
+          <div class="timeline-co">Emergence Software · Paris</div>
+          <div class="timeline-body">AI-assisted reporting and dashboards, output validated before delivery.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2025</div>
+        <div>
+          <div class="timeline-role">Associate Digital Marketing Manager</div>
+          <div class="timeline-co">Global Blue · Paris</div>
+          <div class="timeline-body">Localization QA and a weekly multi-region run across six EMEA markets.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2024</div>
+        <div>
+          <div class="timeline-role">Associate Product Marketing Manager</div>
+          <div class="timeline-co">Upfluence · Lyon</div>
+          <div class="timeline-body">Intake-to-launch for 23 releases via ticket-based workflows and launch checklists.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2019–2023</div>
+        <div>
+          <div class="timeline-role">Product &amp; Growth Marketing Manager</div>
+          <div class="timeline-co">ARTH · New Delhi</div>
+          <div class="timeline-body">Full-funnel campaigns; won the London Business School Real Innovation Award.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ornament" aria-hidden="true"><span class="rule"></span><span class="dot"></span><span class="rule"></span></div>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="section-header reveal" style="margin-bottom: var(--s-6);">
+      <h2 class="rotating-head">
+        I'll keep the run
+        <span class="rotator" id="rotator" aria-hidden="true">
+          <span class="accent is-active">reliable.</span>
+          <span class="accent">native.</span>
+          <span class="accent">on time.</span>
+          <span class="accent">checked.</span>
+        </span>
+      </h2>
+    </div>
+
+    <div class="contact-note reveal">
+      <p>I read the June expansion news the week it landed. Twenty new countries, translated and launched from Paris without a single person on the ground. That only works if someone owns what happens after launch, when a placeholder breaks in Albanian or a plural reads wrong in Greek.</p>
+      <p>I like that job. It's the one nobody notices until it's missing. At Global Blue I watched Danish and Italian landing pages bounce less once the copy stopped sounding translated and started sounding local. Same instinct here, at 41 markets.</p>
+      <p>I'm in Paris, authorised to work in France, and I'd run the loop the way you'd want it run: quietly and on time, checked twice.</p>
+      <p class="contact-sign">Parichit Sharma</p>
+    </div>
+
+    <div class="contact-cta reveal">
+      <a href="#" class="btn btn-primary" id="emailBtn">Email me</a>
+      <a href="https://www.linkedin.com/in/parichit" target="_blank" rel="noopener" class="btn btn-outline">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-row">
+    <span>Parichit Sharma</span>
+    <span class="footer-dot"></span>
+    <a href="tel:+33752983575">+33 7 52 98 35 75</a>
+    <span class="footer-dot"></span>
+    <span><span class="auth-dot"></span>&nbsp;Authorised to work in France</span>
+  </div>
+</footer>
+
+<script>
+// Scroll progress
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
+  progress.style.width = (scrolled * 100) + '%';
+}, { passive: true });
+
+// Reveal on scroll
+const revObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('is-visible'); revObserver.unobserve(e.target); }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revObserver.observe(el));
+
+// Count-up metrics
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const target = parseFloat(el.dataset.value);
+    const suffix = el.dataset.suffix || '';
+    const prefix = el.dataset.prefix || '';
+    const dur = 1600; const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = Math.round(target * eased);
+      el.textContent = prefix + val.toLocaleString() + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+    countObserver.unobserve(el);
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-value]').forEach(el => countObserver.observe(el));
+
+// Rotating words
+(function () {
+  const items = Array.from(document.querySelectorAll('#rotator span'));
+  if (!items.length) return;
+  let i = 0;
+  setInterval(() => {
+    const cur = items[i];
+    cur.classList.remove('is-active');
+    cur.classList.add('is-past');
+    setTimeout(() => cur.classList.remove('is-past'), 600);
+    i = (i + 1) % items.length;
+    items[i].classList.add('is-active');
+  }, 2400);
+})();
+
+// Nav active state
+const navLinks = document.querySelectorAll('.nav-links a');
+const sections = document.querySelectorAll('section[id]');
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(s => navObserver.observe(s));
+
+// Spotlight on cards
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('mousemove', (ev) => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--spot-x', (ev.clientX - r.left) + 'px');
+    card.style.setProperty('--spot-y', (ev.clientY - r.top) + 'px');
+  });
+});
+
+// Email assembled at runtime
+(function () {
+  const u = 'parichit.s'; const d = 'outlook.com';
+  const btn = document.getElementById('emailBtn');
+  if (btn) btn.setAttribute('href', 'mailto:' + u + '@' + d + '?subject=' + encodeURIComponent('Localization Operations Specialist, Parichit Sharma'));
+})();
+</script>
+</body>
+</html>
